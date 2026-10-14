@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syllabus-backend-canary
+  namespace: syllabus
+  labels:
+    lab: broken-image
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syllabus-backend-canary
+  template:
+    metadata:
+      labels:
+        app: syllabus-backend-canary
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/tripleyouuu/syllabus-backend:v9.9.9-does-not-exist
+          ports:
+            - containerPort: 8000
