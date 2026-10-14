@@ -292,8 +292,6 @@ Running locally with Docker Compose at `localhost:3000`:
 
 ![App on localhost](docs/screenshots/app-localhost.png)
 
-![docker compose up](docs/screenshots/docker-compose-up.png)
-
 ### Tests
 
 ![pytest](docs/screenshots/pytest.png)
@@ -325,8 +323,6 @@ Running locally with Docker Compose at `localhost:3000`:
 ![EKS cluster](docs/screenshots/aws-eks.png)
 
 ### Kubernetes and Helm
-
-![kubectl get pods](docs/screenshots/kubectl-get-pods.png)
 
 ![kubectl get svc](docs/screenshots/kubectl-get-svc.png)
 
