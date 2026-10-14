@@ -7,7 +7,10 @@ COPY . .
 RUN npm run build
 
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.29-alpine
+
+USER root
+RUN apk upgrade --no-cache
 
 ENV BACKEND_URL=http://backend:8000
 ENV NGINX_ENVSUBST_FILTER=BACKEND_URL
