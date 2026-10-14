@@ -279,3 +279,75 @@ kubectl delete pvc --all -n monitoring
 cd terraform
 terraform destroy
 ```
+
+## Screenshots
+
+### Application
+
+Running on EKS through the ingress load balancer:
+
+![App on EKS](docs/screenshots/app-eks.png)
+
+Running locally with Docker Compose at `localhost:3000`:
+
+![App on localhost](docs/screenshots/app-localhost.png)
+
+![docker compose up](docs/screenshots/docker-compose-up.png)
+
+### Tests
+
+![pytest](docs/screenshots/pytest.png)
+
+### Git
+
+![Commit history](docs/screenshots/commit-history.png)
+
+### CI/CD and registry
+
+![GitHub Actions](docs/screenshots/github-actions.png)
+
+![GHCR packages](docs/screenshots/ghcr-packages.png)
+
+### Trivy
+
+![Trivy backend](docs/screenshots/trivy-backend.png)
+
+![Trivy frontend](docs/screenshots/trivy-frontend.png)
+
+### Terraform and AWS
+
+![terraform plan](docs/screenshots/terraform-plan-1.png)
+
+![terraform plan summary](docs/screenshots/terraform-plan-2.png)
+
+![VPC](docs/screenshots/aws-vpc.png)
+
+![EKS cluster](docs/screenshots/aws-eks.png)
+
+### Kubernetes and Helm
+
+![kubectl get pods](docs/screenshots/kubectl-get-pods.png)
+
+![kubectl get svc](docs/screenshots/kubectl-get-svc.png)
+
+![helm list](docs/screenshots/helm-list.png)
+
+### Monitoring
+
+Backend `/metrics` output:
+
+![metrics](docs/screenshots/metrics-1.png)
+
+![metrics continued](docs/screenshots/metrics-2.png)
+
+Prometheus targets, with the `syllabus-backend` ServiceMonitor showing both pods UP:
+
+![Prometheus targets](docs/screenshots/prometheus-targets-3.png)
+
+![Prometheus targets](docs/screenshots/prometheus-targets-1.png)
+
+![Prometheus targets](docs/screenshots/prometheus-targets-2.png)
+
+Grafana during the load test. Traffic peaks around 430 req/s and the HPA scales the backend from 2 to 6 pods:
+
+![Grafana](docs/screenshots/grafana.png)
