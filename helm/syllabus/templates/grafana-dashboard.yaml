@@ -1,0 +1,12 @@
+{{- if .Values.grafanaDashboard.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "syllabus.fullname" . }}-dashboard
+  labels:
+    {{- include "syllabus.labels" . | nindent 4 }}
+    grafana_dashboard: "1"
+data:
+  syllabus-api.json: |-
+{{ .Files.Get "files/dashboard.json" | indent 4 }}
+{{- end }}
