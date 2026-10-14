@@ -1,0 +1,22 @@
+Syllabus tracker deployed as release "{{ .Release.Name }}" in namespace "{{ .Release.Namespace }}".
+
+Backend image:  {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+Frontend image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}
+
+Check the pods:
+  kubectl get pods -n {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+{{- if .Values.ingress.host }}
+
+Open http://{{ .Values.ingress.host }}/
+{{- else }}
+
+Find the load balancer address:
+  kubectl get svc -n ingress-nginx ingress-nginx-controller
+{{- end }}
+{{- else }}
+
+Port-forward the frontend:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "syllabus.frontendName" . }} 8080:80
+{{- end }}

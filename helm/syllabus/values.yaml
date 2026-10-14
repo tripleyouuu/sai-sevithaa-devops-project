@@ -1,0 +1,76 @@
+imagePullSecrets: []
+
+backend:
+  image:
+    repository: ghcr.io/tripleyouuu/syllabus-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  port: 8000
+  corsOrigins: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+frontend:
+  image:
+    repository: ghcr.io/tripleyouuu/syllabus-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  port: 8080
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+migrations:
+  enabled: true
+
+postgres:
+  enabled: true
+  image: postgres:16-alpine
+  database: syllabus
+  username: syllabus
+  password: syllabus
+  storage: 5Gi
+  storageClassName: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+externalDatabase:
+  url: ""
+
+ingress:
+  enabled: false
+  className: nginx
+  host: ""
+  annotations: {}
+  tls: []
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 60
+
+serviceMonitor:
+  enabled: false
+  interval: 15s
+  labels:
+    release: monitoring
+
+grafanaDashboard:
+  enabled: false
