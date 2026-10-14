@@ -59,3 +59,9 @@ variable "node_max_size" {
   type    = number
   default = 4
 }
+
+variable "admin_principal_arns" {
+  description = "Extra IAM users or roles (e.g. the CI deploy user) that get cluster-admin access"
+  type        = list(string)
+  default     = []
+}

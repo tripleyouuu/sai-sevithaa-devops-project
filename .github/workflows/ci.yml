@@ -108,3 +108,51 @@ jobs:
       - name: Push image
         if: github.event_name != 'pull_request'
         run: docker push "$IMAGE"
+
+  deploy:
+    name: Deploy to EKS
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION || 'ap-south-1' }}
+      CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME || 'syllabus-dev-eks' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.3
+
+      - name: Configure kubectl
+        run: aws eks update-kubeconfig --region "$AWS_REGION" --name "$CLUSTER_NAME"
+
+      - name: Helm upgrade
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          kubectl apply -f k8s/namespace.yaml
+          helm upgrade --install syllabus ./helm/syllabus \
+            --namespace syllabus \
+            -f helm/syllabus/values-eks.yaml \
+            --set backend.image.repository="ghcr.io/${owner}/syllabus-backend" \
+            --set backend.image.tag="${GITHUB_SHA}" \
+            --set frontend.image.repository="ghcr.io/${owner}/syllabus-frontend" \
+            --set frontend.image.tag="${GITHUB_SHA}" \
+            --set postgres.password="${POSTGRES_PASSWORD:?POSTGRES_PASSWORD secret is not set}" \
+            --wait --timeout 6m
+
+      - name: Verify rollout
+        run: |
+          kubectl rollout status deployment/syllabus-backend -n syllabus --timeout=120s
+          kubectl rollout status deployment/syllabus-frontend -n syllabus --timeout=120s
+          kubectl get pods -n syllabus -o wide
+          helm list -n syllabus
