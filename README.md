@@ -165,7 +165,7 @@ This creates:
 
 - a VPC (`10.20.0.0/16`) with two public and two private subnets across two AZs, and a single NAT gateway to keep costs down
 - an EKS cluster (`syllabus-dev-eks`) whose control plane runs in the private subnets
-- a managed node group of 2–4 `t3.medium` nodes
+- a managed node group of 2–4 `c7i-flex.large` nodes (free-tier eligible)
 - the CoreDNS, kube-proxy, VPC CNI, Pod Identity and EBS CSI add-ons (the EBS CSI driver gets its own IRSA role so Postgres and Prometheus can use persistent volumes)
 
 Then point kubectl at the cluster:
